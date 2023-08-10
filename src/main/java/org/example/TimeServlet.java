@@ -25,7 +25,7 @@ public class TimeServlet extends HttpServlet {
         engine = new TemplateEngine();
 
         FileTemplateResolver resolver = new FileTemplateResolver();
-        resolver.setPrefix("/Users/Tanya/Downloads/modul-9-dev/src/main/templates/");
+        resolver.setPrefix(getServletContext().getRealPath("templates/"));
         resolver.setSuffix(".html");
         resolver.setTemplateMode("HTML5");
         resolver.setOrder(engine.getTemplateResolvers().size());
