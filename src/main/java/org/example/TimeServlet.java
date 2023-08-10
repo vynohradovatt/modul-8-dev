@@ -10,8 +10,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 @WebServlet(value = "/time")
@@ -58,7 +61,8 @@ public class TimeServlet extends HttpServlet {
         }
 
         LocalDateTime localDateTime = LocalDateTime.now(ZoneId.of(timezone.replace(" ", "+")));
-        String currentTimeFormatted = localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        String currentTimeFormatted = localDateTime
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) + " " + timezone.replace(" ", "+");
 
         Context context = new Context(req.getLocale());
         context.setVariable("currentTime", currentTimeFormatted);
