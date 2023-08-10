@@ -19,6 +19,7 @@ public class TimeServlet extends HttpServlet {
     private TemplateEngine engine;
 
     private String timezone;
+
     @Override
     public void init() {
         engine = new TemplateEngine();
@@ -31,32 +32,33 @@ public class TimeServlet extends HttpServlet {
         resolver.setCacheable(false);
         engine.addTemplateResolver(resolver);
     }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        
+
         resp.setContentType("text/html; charset=utf-8");
 
         String timezoneParam = req.getParameter("timezone");
 
-        if( timezoneParam != null){
+        if (timezoneParam != null) {
             timezone = timezoneParam;
             resp.addCookie(new Cookie("lastTimezone", timezone.replace(" ", "+")));
         } else {
             Cookie[] cookies = req.getCookies();
-            if(cookies != null) {
+            if (cookies != null) {
                 for (Cookie cookie : cookies) {
                     if (cookie.getName().equals("lastTimezone")) {
                         timezone = cookie.getValue();
                     }
                 }
-
+            } else {
+                timezone = "UTC";
+                resp.addCookie(new Cookie("lastTimezone", timezone.replace(" ", "+")));
             }
-
         }
 
-        LocalDateTime localDateTime = LocalDateTime.now(ZoneId.of(timezone.replace(" ","+")));
+        LocalDateTime localDateTime = LocalDateTime.now(ZoneId.of(timezone.replace(" ", "+")));
         String currentTimeFormatted = localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-
 
         Context context = new Context(req.getLocale());
         context.setVariable("currentTime", currentTimeFormatted);
